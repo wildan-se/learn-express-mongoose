@@ -1,18 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // Mengimpor modul Mongoose untuk berinteraksi dengan MongoDB
 
 // Models
-const Product = require("./models/product");
+const Product = require("./models/product"); // Mengimpor model Product dari file models/product.js
 
 // Connect to mongodb
 mongoose
-  .connect("mongodb://127.0.0.1/shop_db")
+  .connect("mongodb://127.0.0.1/shop_db") // Menghubungkan aplikasi ke database MongoDB lokal bernama "shop_db"
   .then((result) => {
-    console.log("Connected to mongodb");
+    console.log("Connected to mongodb"); // Menampilkan pesan jika berhasil terhubung ke MongoDB
   })
   .catch((err) => {
-    console.log(err);
+    console.log(err); // Menampilkan pesan kesalahan jika terjadi masalah saat menghubungkan ke MongoDB
   });
 
+// Data produk yang akan disemai ke dalam database
 const seedProducts = [
   {
     name: "Kemeja Flanel",
@@ -21,7 +22,6 @@ const seedProducts = [
     color: "biru muda",
     category: "baju",
   },
-
   {
     name: "Celana Chino",
     brand: "Levi's",
@@ -29,7 +29,6 @@ const seedProducts = [
     color: "krem",
     category: "celana",
   },
-
   {
     name: "Sweater",
     brand: "Gap",
@@ -37,7 +36,6 @@ const seedProducts = [
     color: "merah muda",
     category: "jaket",
   },
-
   {
     name: "Kacamata Aviator",
     brand: "Ray-Ban",
@@ -75,11 +73,12 @@ const seedProducts = [
   },
 ];
 
+// Menyimpan data produk ke dalam database
 Product.insertMany(seedProducts)
   .then((result) => {
-    console.log(result);
-    console.log("Seed data added");
+    console.log(result); // Menampilkan hasil operasi penyimpanan
+    console.log("Seed data added"); // Menampilkan pesan jika data berhasil disimpan
   })
   .catch((err) => {
-    console.log(err);
+    console.log(err); // Menampilkan pesan kesalahan jika terjadi masalah saat menyimpan data
   });
