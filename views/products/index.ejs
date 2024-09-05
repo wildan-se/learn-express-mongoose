@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Products</title>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <h1 class="text-4xl font-extrabold mb-8 text-center text-gray-900">
+      <%= category %> Products
+    </h1>
+    <div class="flex justify-center mb-8 gap-4">
+      <a href="/products/create">
+
+        <button
+          class="rounded-lg relative w-56 h-10 cursor-pointer flex items-center border border-green-500 bg-green-500 group hover:bg-green-500 active:bg-green-500 active:border-green-500">
+          <span
+            class="text-white font-semibold ml-8 transform group-hover:translate-x-10 transition-all duration-300">Add
+            Products</span>
+          <span
+            class="absolute right-0 h-full w-10 rounded-lg bg-green-500 flex items-center justify-center transform group-hover:translate-x-0 group-hover:w-full transition-all duration-300">
+            <svg class="svg w-8 text-white" fill="none" height="24" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
+              xmlns="http://www.w3.org/2000/svg">
+              <line x1="12" x2="12" y1="5" y2="19"></line>
+              <line x1="5" x2="19" y1="12" y2="12"></line>
+            </svg>
+          </span>
+        </button>
+
+      </a>
+      <% if (category !=='All' ) { %>
+        <a href="/products"
+          class="inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-md shadow-md hover:bg-gray-300 transition duration-300 ease-in-out transform hover:translate-x-1">
+          All Products
+        </a>
+        <% } %>
+    </div>
+    <!-- Tabel dengan desain baru -->
+    <div class="overflow-x-auto mx-auto">
+      <table class="min-w-full divide-y divide-gray-200 bg-white rounded-lg shadow-md mx-auto">
+        <thead class="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider">Product Name</th>
+            <th class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider">Brand</th>
+            <th class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% for(let product of products) { %>
+            <tr class="hover:bg-gray-100 transition duration-300 ease-in-out">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <%= product.name %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                <%= product.brand %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm  hover:underline decoration-solid">
+                <a href="/products/<%= product._id %>" class="text-blue-600 hover:text-blue-900 ">View Details</a>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
