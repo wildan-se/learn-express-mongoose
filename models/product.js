@@ -4,7 +4,7 @@ const mongoose = require("mongoose"); // Mengimpor modul Mongoose untuk berinter
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Nama produk harus diisi"],
   },
   brand: {
     type: String,
