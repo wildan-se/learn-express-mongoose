@@ -6,18 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Mengatur viewport untuk perangkat mobile -->
   <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor Tailwind CSS dari CDN -->
-  <title>Create Products</title> <!-- Menentukan judul halaman yang muncul di tab browser -->
+  <title>Create Garments</title> <!-- Menentukan judul halaman yang muncul di tab browser -->
 </head>
 
 <body class="bg-gray-100 text-gray-800 font-sans"> <!-- Mengatur gaya dasar untuk latar belakang, teks, dan font -->
   <div class="max-w-xl mx-auto py-8 px-6"> <!-- Container utama dengan batas lebar maksimum dan padding -->
-    <h1 class="text-3xl font-bold mb-6 text-center text-gray-900">Add Products</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-900">Add Garments</h1>
     <!-- Judul halaman dengan ukuran dan gaya font tertentu -->
 
-    <form action="/garments/<%= garment_id %>/products" method="post" class="bg-white p-8 rounded-lg shadow-lg">
+    <form action="/garments" method="post" class="bg-white p-8 rounded-lg shadow-lg">
       <!-- Formulir dengan latar belakang putih, padding, sudut melengkung, dan bayangan -->
       <div class="mb-4"> <!-- Kontainer untuk setiap input dengan margin bawah -->
-        <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Nama</label>
+        <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Nama Garment</label>
         <!-- Label untuk input nama -->
         <input type="text" name="name" id="name"
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
@@ -25,41 +25,19 @@
       </div>
 
       <div class="mb-4">
-        <label for="brand" class="block text-sm font-semibold text-gray-700 mb-1">Brand</label>
+        <label for="location" class="block text-sm font-semibold text-gray-700 mb-1">Lokasi</label>
         <!-- Label untuk input brand -->
-        <input type="text" name="brand" id="brand"
+        <input type="text" name="location" id="location"
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
           placeholder="Masukkan brand produk"> <!-- Input untuk brand produk dengan styling -->
       </div>
 
       <div class="mb-4">
-        <label for="color" class="block text-sm font-semibold text-gray-700 mb-1">Warna</label>
+        <label for="contact" class="block text-sm font-semibold text-gray-700 mb-1">Kontak</label>
         <!-- Label untuk input warna -->
-        <input type="text" name="color" id="color"
+        <input type="text" name="contact" id="contact"
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
           placeholder="Masukkan warna produk"> <!-- Input untuk warna produk dengan styling -->
-      </div>
-
-      <div class="mb-4">
-        <label for="price" class="block text-sm font-semibold text-gray-700 mb-1">Harga</label>
-        <!-- Label untuk input harga -->
-        <input type="number" name="price" id="price"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out"
-          placeholder="Masukkan harga produk"> <!-- Input untuk harga produk dengan styling -->
-      </div>
-
-      <div class="mb-6">
-        <label for="category" class="block text-sm font-semibold text-gray-700 mb-1">Kategori</label>
-        <!-- Label untuk input kategori -->
-        <select name="category" id="category"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out">
-          <!-- Dropdown untuk memilih kategori produk dengan styling -->
-          <option value="" disabled selected>Pilih Kategori</option> <!-- Opsi default yang tidak dapat dipilih -->
-          <option value="baju">Baju</option> <!-- Opsi kategori Baju -->
-          <option value="celana">Celana</option> <!-- Opsi kategori Celana -->
-          <option value="aksesoris">Aksesoris</option> <!-- Opsi kategori Aksesoris -->
-          <option value="jaket">Jaket</option> <!-- Opsi kategori Jaket -->
-        </select>
       </div>
 
       <button type="submit"
@@ -75,7 +53,7 @@
     </form>
 
     <div class="mt-6 text-center"> <!-- Kontainer untuk tombol kembali dengan margin atas dan pusat teks -->
-      <a href="/products"> <!-- Link yang mengarah ke halaman daftar produk -->
+      <a href="/garments"> <!-- Link yang mengarah ke halaman daftar produk -->
         <button type="button"
           class="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group">
           <!-- Tombol kembali dengan styling dan efek grup -->

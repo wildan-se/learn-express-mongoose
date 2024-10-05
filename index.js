@@ -4,9 +4,10 @@ const methodOverride = require("method-override"); // Mengimpor method-override 
 const mongoose = require("mongoose"); // Mengimpor mongoose untuk berinteraksi dengan MongoDB sebagai database
 const app = express(); // Inisialisasi aplikasi Express
 const errorHandler = require("./errorHandler"); // Mengimpor middleware custom error handler dari file errorHandler.js
-
+const port = 3000; // Menyimpan port server di variabel port
 // Models
 const Product = require("./models/product"); // Mengimpor model Product dari folder models untuk berinteraksi dengan database
+const Garment = require("./models/garment"); // Mengimpor model Garment dari folder models untuk berinteraksi dengan database
 
 // Connect to mongodb
 mongoose
@@ -36,17 +37,81 @@ app.get("/", (req, res) => {
   res.send("Hello World"); // Mengirimkan teks "Hello World" saat mengakses URL root "/"
 });
 
+// Route untuk menampilkan semua garments
+app.get(
+  "/garments",
+  wrapAsync(async (req, res) => {
+    const garments = await Garment.find({}); // Mengambil semua garment dari database
+    res.render("garments/index", { garments }); // Render halaman index.ejs dengan daftar garment
+  })
+);
+
+// Route untuk menampilkan form pembuatan garment
+app.get("/garments/create", (req, res) => {
+  res.render("garments/create"); // Render form untuk membuat garment baru
+});
+
+// Route untuk menambahkan garment baru
+app.post(
+  "/garments",
+  wrapAsync(async (req, res) => {
+    const garment = new Garment(req.body); // Membuat instance Garment baru berdasarkan data yang dikirimkan di request body
+    await garment.save(); // Menyimpan garment baru ke database MongoDB
+    res.redirect(`/garments`); // Redirect ke halaman daftar garment
+  })
+);
+
+// Route untuk menampilkan detail garment berdasarkan ID
+app.get(
+  "/garments/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params; // Mendapatkan parameter id dari URL
+    const garment = await Garment.findById(id).populate("products"); // Mencari garment berdasarkan ID dan populate produk yang terkait
+    res.render("garments/show", { garment }); // Render halaman show.ejs untuk menampilkan detail garment
+  })
+);
+
+// Route untuk menampilkan form pembuatan produk baru untuk garment tertentu
+app.get("/garments/:garment_id/products/create", (req, res) => {
+  const { garment_id } = req.params; // Mendapatkan parameter garment_id dari URL
+  res.render("products/create", { garment_id }); // Render form untuk membuat produk baru untuk garment tertentu
+});
+
+// Route untuk menambahkan produk baru ke garment tertentu
+app.post(
+  "/garments/:garment_id/products",
+  wrapAsync(async (req, res) => {
+    const { garment_id } = req.params; // Mendapatkan parameter garment_id dari URL
+    const garment = await Garment.findById(garment_id); // Mencari garment berdasarkan ID
+    const product = new Product(req.body); // Membuat instance Product baru berdasarkan data yang dikirimkan di request body
+    garment.products.push(product); // Menambahkan produk baru ke array produk dalam garment
+    product.garment = garment; // Menambahkan referensi garment ke dalam product
+    await garment.save(); // Menyimpan garment yang sudah diperbarui
+    await product.save(); // Menyimpan produk baru ke database MongoDB
+    console.log(garment); // Mencetak garment yang diperbarui ke console untuk debugging
+    res.redirect(`/garments/${garment_id}`); // Redirect ke halaman detail garment
+  })
+);
+
+// Route untuk menghapus garment berdasarkan ID
+app.delete(
+  "/garments/:garment_id",
+  wrapAsync(async (req, res) => {
+    const { garment_id } = req.params; // Mendapatkan parameter garment_id dari URL
+    await Garment.findOneAndDelete({ _id: garment_id }); // Menghapus garment dari database berdasarkan ID
+    res.redirect("/garments"); // Redirect ke halaman daftar garment
+  })
+);
+
 // Route untuk menampilkan daftar produk
 app.get("/products", async (req, res) => {
   const { category } = req.query; // Mendapatkan parameter query category dari URL (opsional)
   if (category) {
-    // Jika ada parameter category pada query string
-    const products = await Product.find({ category }); // Mencari produk dengan kategori yang cocok dari database
-    res.render("products/index", { products, category }); // Render halaman index.ejs dengan daftar produk yang cocok dan kategori yang dipilih
+    const products = await Product.find({ category }); // Mencari produk berdasarkan kategori dari database
+    res.render("products/index", { products, category }); // Render halaman index.ejs dengan daftar produk berdasarkan kategori
   } else {
-    // Jika tidak ada parameter category pada query string
     const products = await Product.find({}); // Mengambil semua produk dari database
-    res.render("products/index", { products, category: "All" }); // Render halaman index.ejs dengan semua produk dan label kategori "All"
+    res.render("products/index", { products, category: "All" }); // Render halaman index.ejs dengan semua produk
   }
 });
 
@@ -55,13 +120,13 @@ app.get("/products/create", (req, res) => {
   res.render("products/create"); // Render form untuk membuat produk baru
 });
 
-// Route untuk menambahkan produk baru ke database
+// Route untuk menambahkan produk baru
 app.post(
   "/products",
   wrapAsync(async (req, res) => {
     const product = new Product(req.body); // Membuat instance Product baru berdasarkan data yang dikirimkan di request body
     await product.save(); // Menyimpan produk baru ke database MongoDB
-    res.redirect(`/products/${product._id}`); // Redirect ke halaman detail produk baru berdasarkan ID yang baru dibuat
+    res.redirect(`/products/${product._id}`); // Redirect ke halaman detail produk yang baru dibuat
   })
 );
 
@@ -70,7 +135,7 @@ app.get(
   "/products/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params; // Mendapatkan parameter id dari URL
-    const product = await Product.findById(id); // Mencari produk berdasarkan ID dari database
+    const product = await Product.findById(id).populate("garment"); // Mencari produk berdasarkan ID dan populate garment yang terkait
     res.render("products/show", { product }); // Render halaman show.ejs untuk menampilkan detail produk
   })
 );
@@ -117,25 +182,24 @@ const validatorHandler = (err) => {
 // Middleware global untuk menangani error
 app.use((err, req, res, next) => {
   console.log(err); // Mencetak error ke console untuk debugging
-  if (err.name === "validationError") err = validatorHandler(err);
-  // Jika nama error adalah "validationError", panggil validatorHandler untuk memproses error dan memberikan pesan validasi yang sesuai
+  if (err.name === "validationError") err = validatorHandler(err); // Memproses error validasi dengan validatorHandler
 
   if (err.name === "castError") {
-    // Jika nama error adalah "castError" (biasanya terjadi saat salah format ID MongoDB)
+    // Jika ada error cast (misalnya ID produk tidak valid)
     err.status = 400; // Mengatur status error menjadi 400 (Bad Request)
-    err.message = "Product ID not found"; // Mengatur pesan error menjadi "Product ID not found" untuk memberikan informasi yang lebih jelas
+    err.message = "Product ID not found"; // Menyediakan pesan error yang lebih jelas
   }
 
   next(err); // Meneruskan error yang telah dimodifikasi ke middleware error handling berikutnya
 });
 
-// Middleware error handler untuk menangani error yang dilempar dari route
+// Middleware error handler akhir untuk menangani error yang dilempar dari route
 app.use((err, req, res, next) => {
   const { status = 500, message = "something went wrong" } = err; // Menangkap status dan pesan dari error
   res.status(status).send(message); // Mengirimkan response dengan status dan pesan error
 });
 
 // Menjalankan server di port 3000
-app.listen(3000, () => {
-  console.log("Shop App listening on port http://127.0.0.1:3000"); // Log saat server berhasil berjalan di port 3000
+app.listen(port, () => {
+  console.log("Shop App listening on port http://127.0.0.1:3000"); // Menampilkan pesan saat server berhasil berjalan di port 3000
 });

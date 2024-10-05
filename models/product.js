@@ -22,6 +22,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     enum: ["baju", "celana", "aksesoris", "jaket"],
   },
+  garment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Garment",
+  },
 });
 
 // Membuat model Mongoose berdasarkan skema

@@ -15,32 +15,42 @@
     </h1>
 
     <ul class="bg-white p-6 rounded-lg shadow-lg mb-6">
-      <li class="mb-3">
+      <li class="mb-2">
         <span class="font-semibold text-gray-700">Brand:</span>
         <%= product.brand %>
       </li>
-      <li class="mb-3">
+      <li class="mb-2">
         <span class="font-semibold text-gray-700">Warna:</span>
         <%= product.color %>
       </li>
-      <li class="mb-3">
+      <li class="mb-2">
         <span class="font-semibold text-gray-700">Harga:</span>
         <%= product.price %>
       </li>
-      <li>
+      <li class="mb-2">
         <span class="font-semibold text-gray-700">Kategori:</span>
         <a href="/products?category=<%= product.category %>"
           class="text-blue-500 hover:underline transition duration-300 ease-in-out">
           <%= product.category %>
         </a>
       </li>
+      <span class="font-semibold text-gray-700">Garment:</span>
+      <a href="/garments/<%= product.garment.id %>" class="text-blue-500 hover:underline ">
+        <%= product.garment.name %>
+      </a>
     </ul>
+
+
+
+
+
 
     <div class="flex justify-between items-center mb-6 space-x-4">
       <a href="/products"
         class="text-blue-500 font-semibold px-6 py-2 rounded-lg transition-transform duration-300 ease-in-out transform hover:translate-x-3  hover:shadow-lg">
         All Products
       </a>
+
       <a href="/products/<%= product._id %>/edit"
         class="text-green-500 font-semibold px-6 py-2 rounded-lg transition-transform duration-300 ease-in-out transform hover:-translate-x-3  hover:shadow-lg">
         Edit

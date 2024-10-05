@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Detail Garment</title>
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="max-w-lg mx-auto py-12 px-6 ">
+    <h1 class="text-4xl font-bold mb-6 text-center text-black">
+      <%= garment.name %>
+    </h1>
+
+    <ul class="bg-white p-6 rounded-lg shadow-lg mb-6">
+      <li class="">
+        <span class="font-semibold text-gray-700">Location:</span>
+        <%= garment.location %>
+      </li>
+      <li class="mb-5">
+        <span class="font-semibold text-gray-700">Kontak:</span>
+        <%= garment.contact %>
+      </li>
+      <h2>Products</h2>
+      <ul>
+        <% let index=1; %>
+          <% for(let product of garment.products) { %>
+            <li class="space-x-4">
+              <%= index++ %>.
+                <p class="inline-flex  ">
+                  <%= product.name %> - <%= product.brand %>
+                </p>
+                <a href="/products/<%= product._id %>" class="hover:text-blue-500">
+                  Detail
+                </a>
+            </li>
+            <% } %>
+      </ul>
+
+
+    </ul>
+
+
+
+    <div class="flex justify-between items-center mb-6 ">
+      <a href="/garments"
+        class="text-blue-500 font-semibold px-6 py-2 rounded-lg transition-transform duration-300 ease-in-out transform hover:translate-x-3  hover:shadow-lg">
+        All Garments
+      </a>
+
+      <a href="/garments/<%= garment._id %>/edit"
+        class="text-green-500 font-semibold px-6 py-2 rounded-lg transition-transform duration-300 ease-in-out transform hover:-translate-x-3  hover:shadow-lg">
+        Edit
+      </a>
+    </div>
+
+    <form action="/garments/<%= garment._id %>?_method=DELETE" method="post"
+      class="text-center flex justify-center items-center">
+      <button type="submit" class="cursor-pointer transition-all bg-red-500 text-white px-6 py-2 rounded-lg
+border-red-600
+border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+        Delete
+      </button>
+      <div class="flex  group">
+        <a href="/garments/<%= garment._id %>/products/create"
+          class="text-black font-semibold ml-8 transform group-hover:translate-x-8 transition-all duration-300">Add
+          Products</a>
+
+      </div>
+    </form>
+
+
+  </div>
+
+</body>
+
+</html>
